@@ -1,0 +1,80 @@
+!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ViperAid - NGO/Rescuer Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <a class="logo-section" href="/" aria-label="Go to Home">
+        <div class="logo" aria-hidden="true">🐾</div>
+        <span class="app-name">ViperAid</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="/report" class="nav-link">Report</a>
+        <a href="/rescue" class="nav-link nav-active">Rescue</a>
+        <a href="/donate" class="nav-link">Donate</a>
+        <a href="/about" class="nav-link">About</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="rescue-main">
+    <header class="page-header">
+      <h1 class="page-title">NGO / Rescuer Login</h1>
+      <p class="page-subtitle">
+        This login protects the rescue dashboard so only verified teams can update case status.
+      </p>
+    </header>
+
+    <section class="form-container">
+      <form method="POST" class="report-form" autocomplete="on">
+        <div class="form-section">
+          <h3 class="form-section-title">Organization Access</h3>
+
+          <div class="form-group">
+            <label class="form-label" for="org">Organization / NGO Name *</label>
+            <input id="org" name="org" class="form-input" required placeholder="Example: Street Paws Rescue" />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="code">NGO Access Code *</label>
+            <input id="code" name="code" class="form-input" required placeholder="Enter NGO code" />
+            <small class="form-hint">
+              Demo code: <strong>VIPERNGO</strong>
+            </small>
+          </div>
+
+          {% if error %}
+          <div class="empty-state" style="display:block; border-style: solid;">
+            <h3 style="margin:0;">Login Failed</h3>
+            <p style="margin-top:8px;">{{ error }}</p>
+          </div>
+          {% endif %}
+        </div>
+
+        <div class="form-actions">
+          <a class="btn btn-secondary" href="/">Back</a>
+          <button class="btn btn-primary" type="submit">Open Rescue Dashboard</button>
+        </div>
+
+        <p class="form-note">
+          In real deployment, each NGO gets verified accounts + role permissions.
+        </p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2026 ViperAid • Verified rescue teams only.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

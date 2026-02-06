@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ViperAid - Citizen Login</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <a class="logo-section" href="/" aria-label="Go to Home">
+        <div class="logo" aria-hidden="true">🐾</div>
+        <span class="app-name">ViperAid</span>
+      </a>
+
+      <div class="nav-links">
+        <a href="/report" class="nav-link">Report</a>
+        <a href="/rescue" class="nav-link">Rescue</a>
+        <a href="/donate" class="nav-link">Donate</a>
+        <a href="/about" class="nav-link">About</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="report-main">
+    <header class="page-header">
+      <h1 class="page-title">Citizen Login</h1>
+      <p class="page-subtitle">
+        Log in to report, donate, and contact faster. (Demo login — no password needed.)
+      </p>
+    </header>
+
+    <section class="form-container">
+      <form method="POST" class="report-form" autocomplete="on">
+        <div class="form-section">
+          <h3 class="form-section-title">Your Details</h3>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="name">Name *</label>
+              <input id="name" name="name" class="form-input" required placeholder="Your full name" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="phone">Phone</label>
+              <input id="phone" name="phone" class="form-input" placeholder="+91 XXXXX XXXXX" />
+              <small class="form-hint">Optional (used only for rescue follow-up).</small>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="email">Email</label>
+            <input id="email" name="email" type="email" class="form-input" placeholder="you@email.com" />
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <a class="btn btn-secondary" href="/">Back</a>
+          <button class="btn btn-primary" type="submit">Enter ViperAid</button>
+        </div>
+
+        <p class="form-note">
+          This is a demo login. For real deployment, we add OTP / password and database users.
+        </p>
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2026 ViperAid • Human-first rescue support.</p>
+    </div>
+  </footer>
+
+</body>
+</html>

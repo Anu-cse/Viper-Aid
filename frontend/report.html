@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ViperAid - Report</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <a class="logo-section" href="/" aria-label="Go to Home">
+        <div class="logo" aria-hidden="true">🐾</div>
+        <span class="app-name">ViperAid</span>
+      </a>
+      <div class="nav-links">
+        <a href="/rescue" class="nav-link">Rescue</a>
+        <a href="/report" class="nav-link nav-active">Report</a>
+        <a href="/donate" class="nav-link">Donate</a>
+        <a href="/about" class="nav-link">About</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="report-main">
+    <header class="page-header">
+      <h1 class="page-title">Report an Animal in Distress</h1>
+      
+    </header>
+
+    <section class="form-container">
+      <form id="reportForm" class="report-form" autocomplete="on">
+
+        <div class="form-section">
+          <h3 class="form-section-title">1) Animal & Urgency</h3>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="animalType">Animal Type *</label>
+              <select id="animalType" name="animalType" class="form-select" required>
+                <option value="">Select</option>
+                <option>Dog</option>
+                <option>Cat</option>
+                <option>Bird</option>
+                <option>Cow</option>
+                <option>Horse</option>
+                <option>Goat</option>
+                <option>Rabbit</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="urgency">Urgency *</label>
+              <select id="urgency" name="urgency" class="form-select" required>
+                <option value="">Select</option>
+                <option value="Critical">🔴 Critical - immediate rescue needed</option>
+                <option value="High">🟠 High - rescue needed within hours</option>
+                <option value="Medium">🟡 Medium - rescue needed within 24 hours</option>
+                <option value="Low">🟢 Low - non-emergency</option>
+              </select>
+              <small class="form-hint">Choose honestly — this controls priority on the dashboard.</small>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="form-section-title">2) Location</h3>
+
+          <div class="form-group">
+            <label class="form-label" for="locationText">Landmark / Address *</label>
+            <input id="locationText" name="locationText" class="form-input"
+                   placeholder="Example: Near Bus Stop, MG Road" required />
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="geo">Geotag (GPS)</label>
+            <div class="geotag-container">
+              <input id="geo" name="geo" class="form-input" placeholder="Latitude, Longitude" readonly />
+              <button type="button" class="btn-geotag" id="btnGeo">📍 Capture</button>
+            </div>
+            <small class="form-hint">
+              We capture GPS from the device. (Photos usually don’t share GPS for privacy.)
+            </small>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="form-section-title">3) Photos & Description</h3>
+
+          <div class="form-group">
+            <label class="form-label" for="photos">Photos *</label>
+            <div class="photo-upload-area">
+              <input type="file" id="photos" name="photos" class="file-input"
+                     accept="image/*" multiple capture="environment" required />
+              <label for="photos" class="file-upload-label">
+                <div class="upload-icon">📷</div>
+                <span class="upload-text">Tap to upload or take photos</span>
+                <span class="upload-hint">Multiple photos allowed</span>
+              </label>
+            </div>
+            <div id="photoPreview" class="photo-preview"></div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label" for="description">What happened? *</label>
+            <textarea id="description" name="description" class="form-textarea" rows="6"
+                      placeholder="Describe injuries, behavior, risk (traffic), and what you observed..." required></textarea>
+            <small class="form-hint">Short + clear helps rescuers act faster.</small>
+          </div>
+        </div>
+
+        <div class="form-section">
+          <h3 class="form-section-title">4) Your Details (Optional)</h3>
+
+          <div class="form-row">
+            <div class="form-group">
+              <label class="form-label" for="reporterName">Name</label>
+              <input id="reporterName" name="reporterName" class="form-input" placeholder="Your name" />
+            </div>
+            <div class="form-group">
+              <label class="form-label" for="reporterPhone">Phone</label>
+              <input id="reporterPhone" name="reporterPhone" class="form-input" placeholder="+91 XXXXX XXXXX" />
+            </div>
+          </div>
+        </div>
+
+        <div class="form-actions">
+          <button type="reset" class="btn btn-secondary">Clear</button>
+          <button type="submit" class="btn btn-primary">Submit Report</button>
+        </div>
+
+        <p class="form-note">
+          After submit, your case appears in the Rescue Dashboard.
+        </p>
+
+      </form>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2026 ViperAid • Every paw matters.</p>
+    </div>
+  </footer>
+
+  <script>
+    const photosInput = document.getElementById("photos");
+    const preview = document.getElementById("photoPreview");
+
+    photosInput.addEventListener("change", () => {
+      preview.innerHTML = "";
+      Array.from(photosInput.files || []).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = e => {
+          const img = document.createElement("img");
+          img.src = e.target.result;
+          img.className = "preview-image";
+          preview.appendChild(img);
+        };
+        reader.readAsDataURL(file);
+      });
+    });
+
+    document.getElementById("btnGeo").addEventListener("click", () => {
+      const geoField = document.getElementById("geo");
+      if (!navigator.geolocation) {
+        alert("Geolocation not supported on this device.");
+        return;
+      }
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const lat = pos.coords.latitude.toFixed(6);
+          const lon = pos.coords.longitude.toFixed(6);
+          geoField.value = `${lat}, ${lon}`;
+        },
+        () => alert("Could not capture location. Please try again.")
+      );
+    });
+
+    document.getElementById("reportForm").addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const animalType = document.getElementById("animalType").value.trim();
+      const urgency = document.getElementById("urgency").value.trim();
+      const locationText = document.getElementById("locationText").value.trim();
+      const geo = document.getElementById("geo").value.trim();
+      const description = document.getElementById("description").value.trim();
+      const reporterName = document.getElementById("reporterName").value.trim();
+      const reporterPhone = document.getElementById("reporterPhone").value.trim();
+
+      const photos = [];
+      for (const file of Array.from(photosInput.files || [])) {
+        const b64 = await new Promise((resolve) => {
+          const r = new FileReader();
+          r.onload = () => resolve(r.result);
+          r.readAsDataURL(file);
+        });
+        photos.push(b64);
+      }
+
+      const reports = JSON.parse(localStorage.getItem("viperaid_reports") || "[]");
+
+      const newCase = {
+        id: "VA-" + Date.now(),
+        createdAt: new Date().toISOString(),
+        animalType,
+        urgency,
+        locationText,
+        geo,
+        description,
+        reporterName,
+        reporterPhone,
+        photos,
+        status: "Reported",
+        assignedTo: ""
+      };
+
+      reports.unshift(newCase);
+      localStorage.setItem("viperaid_reports", JSON.stringify(reports));
+
+      window.location.href = "/rescue";
+    });
+  </script>
+
+</body>
+</html>

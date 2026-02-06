@@ -1,0 +1,184 @@
+DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ViperAid - Donate</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <a class="logo-section" href="/" aria-label="Go to Home">
+        <div class="logo" aria-hidden="true">🐾</div>
+        <span class="app-name">ViperAid</span>
+      </a>
+      <div class="nav-links">
+        <a href="/rescue" class="nav-link">Rescue</a>
+        <a href="/report" class="nav-link">Report</a>
+        <a href="/donate" class="nav-link nav-active">Donate</a>
+        <a href="/about" class="nav-link">About</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="donate-main">
+    <header class="page-header">
+      <h1 class="page-title">Donate to Save Lives</h1>
+      <p class="page-subtitle">
+        Your donation supports rescue transport, veterinary care, shelter, food, and rehabilitation.
+      </p>
+    </header>
+
+    <section class="donate-container">
+
+      <div class="donate-left">
+        <article class="cost-breakdown">
+          <h2 class="section-heading">Where Your Money Goes</h2>
+          <div class="cost-items">
+            <div class="cost-item">
+              <div class="cost-icon">🚑</div>
+              <div class="cost-details">
+                <h3 class="cost-title">Rescue Transport</h3>
+                <p class="cost-description">Fuel, ambulance/auto support, rescue tools.</p>
+                <span class="cost-amount">₹300 - ₹1,500</span>
+              </div>
+            </div>
+
+            <div class="cost-item">
+              <div class="cost-icon">⚕️</div>
+              <div class="cost-details">
+                <h3 class="cost-title">Medical Care</h3>
+                <p class="cost-description">First aid, surgery, medicines, vaccinations.</p>
+                <span class="cost-amount">₹800 - ₹6,000</span>
+              </div>
+            </div>
+
+            <div class="cost-item">
+              <div class="cost-icon">🏠</div>
+              <div class="cost-details">
+                <h3 class="cost-title">Shelter & Recovery</h3>
+                <p class="cost-description">Temporary shelter, bedding, hygiene and rehab.</p>
+                <span class="cost-amount">₹300 - ₹1,000/month</span>
+              </div>
+            </div>
+
+            <div class="cost-item">
+              <div class="cost-icon">🍖</div>
+              <div class="cost-details">
+                <h3 class="cost-title">Food & Nutrition</h3>
+                <p class="cost-description">Diet support for injured + recovering animals.</p>
+                <span class="cost-amount">₹200 - ₹700/month</span>
+              </div>
+            </div>
+
+            <div class="cost-item">
+              <div class="cost-icon">🧩</div>
+              <div class="cost-details">
+                <h3 class="cost-title">Platform Maintenance</h3>
+                <p class="cost-description">Keeping ViperAid online and improving features.</p>
+                <span class="cost-amount">Project-based</span>
+              </div>
+            </div>
+          </div>
+        </article>
+      </div>
+
+      <div class="donate-right">
+        <div class="donation-form-card">
+          <h2 class="form-heading">Scan & Pay</h2>
+
+          <div class="qr-section">
+            <div class="qr-code-container">
+              <div class="qr-placeholder">
+                <svg viewBox="0 0 200 200" class="qr-svg" aria-label="QR Placeholder">
+                  <rect width="200" height="200" fill="#fff"/>
+                  <rect x="10" y="10" width="60" height="60" fill="#000"/>
+                  <rect x="130" y="10" width="60" height="60" fill="#000"/>
+                  <rect x="10" y="130" width="60" height="60" fill="#000"/>
+                  <rect x="90" y="90" width="20" height="20" fill="#000"/>
+                  <rect x="100" y="110" width="40" height="40" fill="#000"/>
+                </svg>
+              </div>
+              <p class="qr-text">UPI ID: viperaid@upi</p>
+            </div>
+          </div>
+
+          <div class="form-divider"><span class="divider-text">OR</span></div>
+
+          <form id="donationForm" class="donation-form">
+            <div class="form-group">
+              <label class="form-label" for="donorName">Name *</label>
+              <input id="donorName" name="donorName" class="form-input" required placeholder="Full name" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="donorEmail">Email *</label>
+              <input id="donorEmail" name="donorEmail" type="email" class="form-input" required placeholder="you@email.com" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="donorPhone">Phone *</label>
+              <input id="donorPhone" name="donorPhone" class="form-input" required placeholder="+91 XXXXX XXXXX" />
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="amount">Amount (₹) *</label>
+              <div class="amount-input-group">
+                <span class="currency-symbol">₹</span>
+                <input id="amount" name="amount" type="number" min="50" class="form-input amount-input" required placeholder="0" />
+              </div>
+            </div>
+
+            <div class="suggested-amounts">
+              <button type="button" class="amount-btn" data-amt="200">₹200</button>
+              <button type="button" class="amount-btn" data-amt="500">₹500</button>
+              <button type="button" class="amount-btn" data-amt="1000">₹1,000</button>
+              <button type="button" class="amount-btn" data-amt="2000">₹2,000</button>
+            </div>
+
+
+            <button type="submit" class="btn btn-primary btn-donate">💝 Save Donation</button>
+            
+          </form>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2026 ViperAid • Thank you for helping.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.querySelectorAll(".amount-btn").forEach(btn => {
+      btn.addEventListener("click", () => {
+        document.getElementById("amount").value = btn.dataset.amt;
+      });
+    });
+
+    document.getElementById("donationForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const donation = {
+        name: donorName.value.trim(),
+        email: donorEmail.value.trim(),
+        phone: donorPhone.value.trim(),
+        amount: Number(amount.value),
+        createdAt: new Date().toISOString()
+      };
+
+      const donations = JSON.parse(localStorage.getItem("viperaid_donations") || "[]");
+      donations.unshift(donation);
+      localStorage.setItem("viperaid_donations", JSON.stringify(donations));
+
+      alert("Donation info saved. Thank you!");
+      e.target.reset();
+    });
+  </script>
+
+</body>
+</html>

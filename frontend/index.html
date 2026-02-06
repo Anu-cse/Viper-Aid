@@ -1,0 +1,149 @@
+!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>ViperAid - Home</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+
+    <!-- Top Nav -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a class="logo-section" href="/" aria-label="Go to Home">
+                <div class="logo" aria-hidden="true">🐾</div>
+                <span class="app-name">ViperAid</span>
+            </a>
+
+            <div class="nav-links">
+                <a href="/login" class="nav-link">Citizen Login</a>
+                <a href="/rescue-login" class="nav-link">NGO Login</a>
+
+                <a href="/report" class="nav-link">Report</a>
+                <a href="/rescue" class="nav-link">Rescue</a>
+                <a href="/donate" class="nav-link">Donate</a>
+                <a href="/about" class="nav-link">About</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="home-main">
+
+        <!-- Hero / Welcome -->
+        <section class="hero-section">
+            <div class="hero-content">
+                <p class="hero-kicker">Human-first rescue network</p>
+                <h1 class="hero-title">Found an injured street animal?</h1>
+
+
+                <div class="hero-actions">
+                    <a href="/report" class="text-action">Report an animal →</a>
+                    <a href="/rescue" class="text-action">View rescue dashboard →</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- How it works -->
+        <section class="how-it-works">
+            <div class="content-container">
+                <h2 class="section-title">How ViperAid Works</h2>
+
+                <div class="steps-grid">
+                    <article class="step-card">
+                        <div class="step-number">01</div>
+                        <h3 class="step-title">Report</h3>
+                        <p class="step-description">
+                            Choose animal type + urgency, add photos, capture location, describe what happened,
+                            and submit the report.
+                        </p>
+                    </article>
+
+                    <article class="step-card">
+                        <div class="step-number">02</div>
+                        <h3 class="step-title">Rescue Updates</h3>
+                        <p class="step-description">
+                            NGOs and rescuers view the case on the rescue dashboard and update status:
+                            Accepted → In Progress → Completed.
+                        </p>
+                    </article>
+
+                    <article class="step-card">
+                        <div class="step-number">03</div>
+                        <h3 class="step-title">Support</h3>
+                        <p class="step-description">
+                            Donors contribute for medical care, food, shelter, and transport via QR or form.
+                            Every rupee is tied to impact.
+                        </p>
+                    </article>
+
+                    <article class="step-card">
+                        <div class="step-number">04</div>
+                        <h3 class="step-title">Community</h3>
+                        <p class="step-description">
+                            ViperAid connects foster families, helpers, and shelters — so rescued animals
+                            get recovery and a real chance.
+                        </p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section class="community-section">
+            <div class="content-container">
+                <h2 class="section-title">Built for Fast Action</h2>
+
+
+                <div class="impact-stats">
+                    <div class="stat-item">
+                        <span class="stat-number" id="statReports">0</span>
+                        <span class="stat-label">Reports saved</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number" id="statActive">0</span>
+                        <span class="stat-label">Active cases</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">4</span>
+                        <span class="stat-label">Core pages</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">24/7</span>
+                        <span class="stat-label">Always accessible</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="cta-section">
+            <div class="content-container">
+                <h2 class="cta-title">Rescue starts with the human who stops.</h2>
+                <p class="cta-description">You’re not alone — we guide you step by step.</p>
+
+                <div class="cta-buttons">
+                    <a href="/report" class="btn btn-primary">Start a Report</a>
+                    <a href="/donate" class="btn btn-secondary">Support a Rescue</a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>&copy; 2026 ViperAid • Connecting NGOs, shelters, volunteers, donors & fosters.</p>
+        </div>
+    </footer>
+
+    <script>
+        const reports = JSON.parse(localStorage.getItem("viperaid_reports") || "[]");
+        const active = reports.filter(r => r.status !== "Completed").length;
+        document.getElementById("statReports").textContent = reports.length;
+        document.getElementById("statActive").textContent = active;
+    </script>
+
+</body>
+
+</html>

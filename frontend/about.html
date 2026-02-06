@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ViperAid - About</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <a class="logo-section" href="/" aria-label="Go to Home">
+        <div class="logo" aria-hidden="true">🐾</div>
+        <span class="app-name">ViperAid</span>
+      </a>
+      <div class="nav-links">
+        <a href="/login" class="nav-link">Citizen Login</a>
+        <a href="/rescue-login" class="nav-link">NGO Login</a>
+
+        <a href="/rescue" class="nav-link">Rescue</a>
+        <a href="/report" class="nav-link">Report</a>
+        <a href="/donate" class="nav-link">Donate</a>
+        <a href="/about" class="nav-link nav-active">About</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="about-main">
+    <header class="page-header">
+      <h1 class="page-title">About ViperAid</h1>
+      <p class="page-subtitle">We connect NGOs, shelters, helpers, donors, and fosters — fast, calm, and transparent.</p>
+    </header>
+
+    <section class="about-container">
+      <div class="about-grid">
+
+        <article class="about-card">
+          <h2 class="section-heading">Our Mission</h2>
+          <p class="mission-text">
+            ViperAid is built for the first critical minutes of an animal emergency — when people panic,
+            don’t know what to do, and need clear steps.
+          </p>
+          <p class="mission-text">
+            We don’t replace rescuers. We support the human who stopped, while rescue teams coordinate the response.
+          </p>
+
+          <h3 class="mini-title">What makes us different</h3>
+          <ul class="bullets">
+            <li>Human-first guidance + emotional clarity</li>
+            <li>Fast reporting with urgency + geotag</li>
+            <li>Transparent rescue status updates</li>
+            <li>Donation support connected to real needs</li>
+          </ul>
+        </article>
+
+        <article class="about-card">
+          <h2 class="section-heading">Contact for Doubts</h2>
+          <p class="contact-intro">
+            Questions, partnerships, volunteering, foster support — send us a message.
+          </p>
+
+          <form id="contactForm" class="contact-form">
+            <div class="form-group">
+              <label class="form-label" for="cName">Name *</label>
+              <input id="cName" name="cName" class="form-input" required placeholder="Your name" />
+            </div>
+
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label" for="cPhone">Phone *</label>
+                <input id="cPhone" name="cPhone" class="form-input" required placeholder="+91 XXXXX XXXXX" />
+              </div>
+              <div class="form-group">
+                <label class="form-label" for="cEmail">Email *</label>
+                <input id="cEmail" name="cEmail" type="email" class="form-input" required placeholder="you@email.com" />
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="cTopic">Reason *</label>
+              <select id="cTopic" name="cTopic" class="form-select" required>
+                <option value="">Select</option>
+                <option>NGO Partnership</option>
+                <option>Shelter Collaboration</option>
+                <option>Volunteer / Foster</option>
+                <option>Donation Query</option>
+                <option>Technical / Website</option>
+                <option>Other</option>
+              </select>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="cMsg">Message *</label>
+              <textarea id="cMsg" name="cMsg" class="form-textarea" rows="5" required placeholder="Type your message..."></textarea>
+            </div>
+
+            <button class="btn btn-primary" type="submit">Send</button>
+            
+          </form>
+        </article>
+      </div>
+    </section>
+
+    <section class="about-footer">
+      <div class="about-footer-grid">
+        <div class="footer-box">
+          <h3 class="footer-title">Helpline</h3>
+          <p class="footer-line">📞 +91 98765 43210</p>
+          <p class="footer-line">📧 support@viperaid.org</p>
+        </div>
+
+        <div class="footer-box">
+          <h3 class="footer-title">Social</h3>
+          <p class="footer-line"><a class="footer-link" href="#" aria-label="Instagram">📷 Instagram</a></p>
+          <p class="footer-line"><a class="footer-link" href="#" aria-label="NGO Network">🤝 NGO Network</a></p>
+        </div>
+
+        <div class="footer-box">
+          <h3 class="footer-title">Conclusion</h3>
+          <p class="footer-line">
+            ViperAid connects compassion with action — helping people respond calmly,
+            while rescue teams do what they do best.
+          </p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2026 ViperAid • Built for community rescue.</p>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("contactForm").addEventListener("submit", (e) => {
+      e.preventDefault();
+      const msg = {
+        name: cName.value.trim(),
+        phone: cPhone.value.trim(),
+        email: cEmail.value.trim(),
+        topic: cTopic.value,
+        message: cMsg.value.trim(),
+        createdAt: new Date().toISOString()
+      };
+      const inbox = JSON.parse(localStorage.getItem("viperaid_contacts") || "[]");
+      inbox.unshift(msg);
+      localStorage.setItem("viperaid_contacts", JSON.stringify(inbox));
+      alert("Message saved. We'll contact you soon!");
+      e.target.reset();
+    });
+  </script>
+
+</body>
+</html>

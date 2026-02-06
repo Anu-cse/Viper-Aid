@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>ViperAid - Rescue Dashboard</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+  <nav class="navbar">
+    <div class="nav-container">
+      <a class="logo-section" href="/" aria-label="Go to Home">
+        <div class="logo" aria-hidden="true">🐾</div>
+        <span class="app-name">ViperAid</span>
+      </a>
+      <div class="nav-links">
+        <a href="/rescue" class="nav-link nav-active">Rescue</a>
+        <a href="/report" class="nav-link">Report</a>
+        <a href="/donate" class="nav-link">Donate</a>
+        <a href="/about" class="nav-link">About</a>
+      </div>
+    </div>
+  </nav>
+
+  <main class="rescue-main">
+    <header class="page-header">
+      <h1 class="page-title">Rescue Dashboard</h1>
+      <p class="page-subtitle">All reports appear here. Rescuers/NGOs update status in real time.</p>
+    </header>
+
+    <section class="dashboard-container">
+      <div class="dashboard-filters">
+        <div class="filter-group">
+          <label class="filter-label" for="statusFilter">Status</label>
+          <select id="statusFilter" class="filter-select">
+            <option value="all">All</option>
+            <option value="Reported">Reported</option>
+            <option value="Accepted">Accepted</option>
+            <option value="In Progress">In Progress</option>
+            <option value="Completed">Completed</option>
+          </select>
+        </div>
+
+        <div class="filter-group">
+          <label class="filter-label" for="urgencyFilter">Urgency</label>
+          <select id="urgencyFilter" class="filter-select">
+            <option value="all">All</option>
+            <option value="Critical">Critical</option>
+            <option value="High">High</option>
+            <option value="Medium">Medium</option>
+            <option value="Low">Low</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="rescue-stats">
+        <div class="stat-card">
+          <div class="stat-icon">📋</div>
+          <div class="stat-info">
+            <span class="stat-value" id="statTotal">0</span>
+            <span class="stat-label">Total Reports</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🚨</div>
+          <div class="stat-info">
+            <span class="stat-value" id="statCritical">0</span>
+            <span class="stat-label">Critical</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">🚑</div>
+          <div class="stat-info">
+            <span class="stat-value" id="statActive">0</span>
+            <span class="stat-label">Active</span>
+          </div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-icon">✅</div>
+          <div class="stat-info">
+            <span class="stat-value" id="statDone">0</span>
+            <span class="stat-label">Completed</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="rescueList" class="rescue-list"></div>
+
+      <div id="emptyState" class="empty-state" style="display:none;">
+        <h3>No reports yet</h3>
+        <p>When someone submits a report, it will show up here.</p>
+        <a href="/report" class="text-action">Create the first report →</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-content">
+      <p>&copy; 2026 ViperAid • Rescue coordination dashboard.</p>
+    </div>
+  </footer>
+
+  <script>
+    const listEl = document.getElementById("rescueList");
+    const emptyEl = document.getElementById("emptyState");
+
+    const statusFilter = document.getElementById("statusFilter");
+    const urgencyFilter = document.getElementById("urgencyFilter");
+
+    function loadReports() {
+      return JSON.parse(localStorage.getItem("viperaid_reports") || "[]");
+    }
+
+    function saveReports(reports) {
+      localStorage.setItem("viperaid_reports", JSON.stringify(reports));
+    }
+
+    function fmtTime(iso) {
+      try { return new Date(iso).toLocaleString(); }
+      catch { return iso; }
+    }
+
+    function urgencyClass(u) {
+      const map = { "Critical":"urgency-critical", "High":"urgency-high", "Medium":"urgency-medium", "Low":"urgency-low" };
+      return map[u] || "urgency-low";
+    }
+
+    function badge(u) {
+      const icons = { "Critical":"🔴", "High":"🟠", "Medium":"🟡", "Low":"🟢" };
+      return `${icons[u] || "🟢"} ${u || "Low"}`;
+    }
+
+    function render() {
+      const reports = loadReports();
+
+      const total = reports.length;
+      const critical = reports.filter(r => r.urgency === "Critical").length;
+      const done = reports.filter(r => r.status === "Completed").length;
+      const active = reports.filter(r => r.status !== "Completed").length;
+
+      document.getElementById("statTotal").textContent = total;
+      document.getElementById("statCritical").textContent = critical;
+      document.getElementById("statActive").textContent = active;
+      document.getElementById("statDone").textContent = done;
+
+      const s = statusFilter.value;
+      const u = urgencyFilter.value;
+
+      const filtered = reports.filter(r => {
+        const okS = (s === "all") || (r.status === s);
+        const okU = (u === "all") || (r.urgency === u);
+        return okS && okU;
+      });
+
+      listEl.innerHTML = "";
+
+      if (filtered.length === 0) {
+        emptyEl.style.display = total === 0 ? "block" : "none";
+        return;
+      } else {
+        emptyEl.style.display = "none";
+      }
+
+      filtered.forEach((r) => {
+        const card = document.createElement("div");
+        card.className = `rescue-card ${urgencyClass(r.urgency)}`;
+
+        const geoLine = r.geo ? `<div class="info-row"><span class="info-label">Geo:</span><span class="info-value">${r.geo}</span></div>` : "";
+        const photosHtml = (r.photos || []).slice(0,3).map(src => `<img class="preview-image" src="${src}" alt="report photo" />`).join("");
+
+        card.innerHTML = `
+          <div class="rescue-header">
+            <div class="rescue-id">
+              <span class="id-label">Case ${r.id}</span>
+              <span class="urgency-badge">${badge(r.urgency)}</span>
+            </div>
+
+            <div class="status-wrap">
+              <select class="status-select">
+                <option ${r.status==="Reported"?"selected":""}>Reported</option>
+                <option ${r.status==="Accepted"?"selected":""}>Accepted</option>
+                <option ${r.status==="In Progress"?"selected":""}>In Progress</option>
+                <option ${r.status==="Completed"?"selected":""}>Completed</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="rescue-body">
+            <div class="rescue-info">
+              <div class="info-row"><span class="info-label">Animal:</span><span class="info-value">${r.animalType}</span></div>
+              <div class="info-row"><span class="info-label">Location:</span><span class="info-value">${r.locationText}</span></div>
+              ${geoLine}
+              <div class="info-row"><span class="info-label">Reported:</span><span class="info-value">${fmtTime(r.createdAt)}</span></div>
+              <div class="info-row"><span class="info-label">Assigned:</span><span class="info-value">${r.assignedTo || "Not assigned"}</span></div>
+            </div>
+
+            <div class="rescue-description">
+              <strong>Description:</strong> ${r.description}
+            </div>
+
+            ${photosHtml ? `<div class="photo-preview">${photosHtml}</div>` : ""}
+
+            <div class="rescue-actions">
+              <input class="assign-input" type="text" placeholder="Assign NGO/Rescuer name..." value="${r.assignedTo || ""}" />
+              <button class="btn btn-secondary btn-mini">Save</button>
+              <button class="btn btn-secondary btn-mini danger">Delete</button>
+            </div>
+          </div>
+        `;
+
+        const statusSel = card.querySelector(".status-select");
+        const assignInput = card.querySelector(".assign-input");
+        const saveBtn = card.querySelectorAll(".btn-mini")[0];
+        const delBtn = card.querySelectorAll(".btn-mini")[1];
+
+        statusSel.addEventListener("change", () => {
+          const all = loadReports();
+          const i = all.findIndex(x => x.id === r.id);
+          if (i >= 0) {
+            all[i].status = statusSel.value;
+            saveReports(all);
+            render();
+          }
+        });
+
+        saveBtn.addEventListener("click", () => {
+          const all = loadReports();
+          const i = all.findIndex(x => x.id === r.id);
+          if (i >= 0) {
+            all[i].assignedTo = assignInput.value.trim();
+            saveReports(all);
+            render();
+          }
+        });
+
+        delBtn.addEventListener("click", () => {
+          if (!confirm("Delete this case?")) return;
+          const all = loadReports().filter(x => x.id !== r.id);
+          saveReports(all);
+          render();
+        });
+
+        listEl.appendChild(card);
+      });
+    }
+
+    statusFilter.addEventListener("change", render);
+    urgencyFilter.addEventListener("change", render);
+    render();
+  </script>
+
+</body>
+</html>
